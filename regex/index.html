@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <style>
+        input.valid {
+            border: 2px solid green;
+
+        }
+
+        input.invalid {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row ">
+            <div class="col-8 mx-auto">
+                <h1 class="text-center display-">Signup Form</h1>
+
+                <input type="text" name="username" id="username" class="form-control" placeholder="Enter username"><br>
+                <label for="username" class="mb-3">Enter username from 5-10 alphanumeric characters</label><br>
+
+
+                <input type="text" name="email" id="email" class="form-control" placeholder="Enter email"><br><label
+                    for="email" class="mb-3">Enter email like xyz@abc.com</label><br>
+
+
+                <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter phone number"><br>
+                <label for="phone" class="mb-3">please enter you number in following format:+9231757545454 or
+                    032165878787</label><br>
+                <input type="text" name="password" id="password" class="form-control" placeholder="Enter password"><br>
+                <label for="password" class="mb-3">A password must contains a lowercase letter, an uppercase letter, a
+                    digit and an special charater</label><br>
+                <button class="btn btn-info  d-block mx-auto my-2" onclick="Register()">Register</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const regex = {
+            username: /^[a-z]{6,}$/g,
+            email: /^([\w]{6,})@([\w])+\.([a-z]{2,6})(\.[a-z]{2,4})*$/g,
+            password:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g,
+            phone: /^[\+]?[\d]{11,15}$/g
+
+        };
+        let user = JSON.parse(localStorage.getItem("user")) || []
+
+        function validate(elem, pattern) {
+            elem.value.match(pattern)
+            if (pattern.test(elem.value)) {
+                elem.classList.add("valid");
+                elem.classList.remove("invalid");
+            }
+            else {
+                elem.classList.add("invalid");
+                elem.classList.remove("valid");
+            }
+        }
+        let inputs = document.querySelectorAll("input")
+        console.log(inputs);
+        inputs.forEach(input => {
+            input.addEventListener("keyup", (e) => {
+                validate(e.target, regex[e.target.attributes.id.value]);
+            })
+        });
+        var valid = false
+        let Register = () => {
+            inputs.forEach(element => {
+                let classes = element.classList.value;
+
+                if (classes.includes("valid") && !classes.includes("invalid")) {
+                    valid = true;
+                }
+                else {
+                    valid = false;
+                }
+
+            })
+            if (valid == true) {
+                let person = {
+                    username: username.value,
+                    email: email.value,
+                    phone: phone.value,
+                    password: password.value
+                }
+                user.push(person)
+                localStorage.setItem("user", JSON.stringify(user))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thanks',
+                    text: 'Regestration Successful',
+                    footer: '<a href="">login now!</a>'
+                })
+            }
+            else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please enter valid values',
+                })
+            }
+        }
+
+
+
+
+
+        let SignUp = () => {
+            let username = document.querySelector("#username");
+            let email = document.querySelector("#email");
+            let phone = document.querySelector("#phone");
+            let password = document.querySelector("#password");
+            if
+                (username.value !== "" && email.value !== "" && phone.value !== "" && password.value !== "") {
+                if
+                    (username.value.match(regex.username).length > 0 &&
+                    email.value.match(regex.email).length > 0 &&
+                    phone.value.match(regex.phone).length > 0 &&
+                    password.value.match(regex.password).length > 0
+                ) {
+                    let person = {
+                        username: username.value,
+                        email: email.value,
+                        phone: phone.value,
+                        password: password.value
+                    }
+                    user.push(person)
+                    localStorage.setItem("user", JSON.stringify(user))
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thanks',
+                        text: 'Regestration Successful',
+                        footer: '<a href="">login now!</a>'
+                    })
+                }
+                else {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Please enter valid values',
+                    })
+                }
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill the value',
+
+                })
+            }
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>
